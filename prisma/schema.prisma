@@ -26,4 +26,24 @@ model User {
   birthDate DateTime?
   status   String   @db.VarChar(50) @default("active")
   lastOnlineAt DateTime? 
+  avatar String? @db.VarChar(255)
+
+  ownedConversations Conversation[]
+
+  @@map("users")
+}
+
+model Conversation {
+  id        BigInt   @id @default(autoincrement())
+  uid       String @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creatorId BigInt
+  name      String?  @db.VarChar(100)
+  isGroup   Boolean 
+
+  creator User @relation(fields: [creatorId], references: [id])
+
+  @@map("conversations") 
 }
